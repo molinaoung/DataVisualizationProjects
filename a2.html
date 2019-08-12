@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		  <title>CIS 468 Assignment #2</title>
+		  <link rel="stylesheet" type="text/css" href="a2.css">
+		  <style type="text/css" >
+		  </style>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.js"></script>
+	</head>
+		<body>
+		  <!-- Info goes here -->
+			<div id="info">
+					<div class="left">
+						<!-- Your Name & Id -->
+						<h1>Molina Oung</h1> 
+						<h2>ID: 01455422</h2>
+					</div>
+						<div class="right">
+							<!-- Class Title & Assignment -->
+							<h3>Data Visualization(CIS 468) </h3>
+							<h3>Assignment 2 </h3>
+						</div>
+			</div>
+
+		  <h1>Bar Chart</h1>
+
+		  <div id="bar"></div>
+
+		  <h1>Stacked Bar Chart</h1>
+
+		  <div id="stacked"></div>
+		  
+		  <!-- Make sure everything is loaded before defining JavaScript. -->
+		  
+</body>
+</html> 
+<script> 
+	
+	function getTotals(data) {
+    // get age ranges from first item (same for each item in the array)
+    ranges = Object.keys(data[0]).filter(d => d != "day");
+    return data.map(function(d) { 
+	return {"day": d.day,
+		"total": ranges.reduce(function(t, s) { return t + d[s]; }, 0)};
+    });
+}
+
+function makeBar(data) {
+    totals = getTotals(data);
+    console.log("Totals:", totals);
+	
+	var height = 500;
+	var width = 700;
+	
+	var x_axisLenth
+	//yscale
+	var yScale = d3.scaleLinear()
+		.domain([0, 80000])
+		.range([32, height])
+	//xscale	
+	var xScale = d3.scaleLinear()
+		.domain([0, 31])
+		.range([0, 635])
+		
+	//create bars
+	var svg = d3.select('#bar').append('svg')
+		.attr('width', width)
+		.attr('height', height)
+		.style('background', '#f4f4f4')
+		.attr("transform", "translate(0,30)")
+		 svg.selectAll('rect')
+			.data(totals)
+			.enter().append('rect')
+			.attr("transform", "translate(70,30)")
+			.attr('x', function(d, i){  
+					return xScale(i); })
+			.attr("y", function(d,i) { return height - yScale(totals[i].total); })
+			.attr("height", function (d, i){
+				return yScale(totals[i].total); 
+			})
+			.attr("width", 18)
+			.style('fill', 'green')	
+	
+
+	//Create y axis scale
+    var y_scale = d3.scaleLinear()
+                  .domain([0, 80000])
+                  .range([height, 30]);
+	 // Add y scales to axis
+    var y_axis = d3.axisLeft()
+                  .scale(y_scale);
+	//Append group and insert axis
+    svg.append("g")
+       .attr("transform", "translate(69,0)")
+       .call(y_axis);	
+	//text  
+	svg.append("text") 
+	.attr("transform", "rotate(-90)")
+	.text("Number of Bike Trips")
+	
+	var data2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+	 // append SVG 
+    var svg = d3.select('#bar')
+                .append("svg")
+                .attr("width",900)
+                .attr("height", 100);
+				
+
+    // Create x axis scale
+    var scale = d3.scaleLinear()
+                  .domain([d3.min(data2), d3.max(data2)])
+                  .range([0, width - 70]);
+
+    // Add scales to axis
+    var xAxis = d3.axisBottom()
+                   .scale(scale);
+
+    //Append group and insert axis
+    svg.append("g")
+	   .attr("transform", "translate(70,30)")
+       .call(xAxis);
+	//text
+	svg.append("text")
+	//.attr("transform",
+	//"translate(
+	.style("text-anchor", "middle")
+	.text("Day");
+    // Part 2 Code
+
+}
+
+function makeStacked(data) {
+    console.log("Data:", data);
+
+    // Part 3 Code
+}
+
+function makeCharts(data) {
+    makeBar(data);
+    makeStacked(data);
+}
+
+d3.json("https://cdn.rawgit.com/dakoop/722724236876db13af3c7f3f11e7eee4/raw/3ee1a9c3085d8e2318e4a7374b6b97231cd69b6c/bikeData.json").then(makeCharts);
+
+</script>
+

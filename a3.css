@@ -1,0 +1,18 @@
+#info{
+	display: flex;
+	flex-direction: row;
+}
+.left{
+	color: blue;
+	text-align: left;
+	border: solid; 
+	border-color: yellow;
+	padding: 15px
+}
+.right{
+	text-align: right;
+	color: blue; 
+	font-style: italic;
+	font-weight: lighter;
+	flex-grow: 1;
+}

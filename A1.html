@@ -1,0 +1,97 @@
+<html>
+	<head>  
+		<link rel="stylesheet" type="text/css" href="Assignment1.css">
+		<script src="https://cdn.rawgit.com/dakoop/c1f4371ff9c249ce1373f35bb8e32d32/raw/2960b6f93c0c65ddfc1cbe5aaba8179ec4ea4bf1/bikeData.js" type="text/javascript"></script>
+	</head>
+	
+	<body>
+		<div id="info">
+			<div class="left">
+				<!-- Your Name & Id -->
+				<h1>Molina Oung</h1> 
+				<h2>ID: 01455422</h2>
+			</div>
+				<div class="right">
+					<!-- Class Title & Assignment -->
+					<h3>Data Visualization(CIS 468) </h3>
+					<h3>Assignment 1 </h3>
+				</div>
+		</div>
+
+		<svg id="house" width="250" height="250">
+			
+			<polygon points = "70 50, 35 25, 0 50" class = "roof"/>
+			<rect class = "body" x = "2" y = "50" width = "65" height = "55" ></rect>
+			<rect class = "window" x = "12" y = "70" width = "20" height = "20" ></rect>
+			<rect class = "door" x = "40" y = "65" width = "20" height = "40" ></rect>
+			<circle 
+				class = "doorknob"
+				cx = "44" cy = "88" r = "2"
+			></circle>
+		</svg>
+	</body>
+	
+	
+	<div id="barchart">
+   <!-- NOTHING GOES HERE, USE JAVASCRIPT -->
+    </div>
+	
+	
+</html>
+
+<script> 
+//plot area
+var plotArea = makeElt ("svg", {"width": 600, "height": 400}, barchart)
+
+//function to find the total number of riders for each day in July
+console.log(getTotals(bikeData));
+function getTotals(data){
+   
+	 return data.map(v => v.reduce((acc, val)=>acc + val,0));
+	
+}
+//function to create SVG elements
+function makeElt(name, attrs, appendTo)
+{
+    var element = document.createElementNS("http://www.w3.org/2000/svg", name);
+    if (attrs === undefined) attrs = {};
+    for (var key in attrs) {
+        element.setAttributeNS(null, key, attrs[key]);
+    }
+    if (appendTo) {
+        appendTo.appendChild(element);
+    }
+    return element;
+}
+
+getTotals(bikeData).forEach(function(d,i) {
+	var rect = makeElt("rect",
+							{"y": 200-d/550, "x": 50 + 15*i, "height": d/550, "width": 13, "fill": "green"}, plotArea)
+							
+})
+
+ var xax = makeElt("line", 
+                     {"x1": 560, 
+                      "x2": 45,
+                      "y1": 200, 
+                      "y2": 200,
+                      "stroke": "blue"}, 
+                     plotArea)
+ var yaxis = makeElt("line", 
+                     {"x1": 45, 
+                      "x2": 45,
+                      "y1": 25, 
+                      "y2": 200,
+                      "stroke": "blue"}, 
+                     plotArea)
+
+function createText(x,y, text){
+const element = document.createElementNS("http://www.w3.org/2000/svg", "text");
+element.setAttribute("x", x);
+element.setAttribute("y", y);
+element.textContent = text;
+return element;
+
+}
+barchart.appendChild(createText(300, 370, "July"));
+</script>
